@@ -1,8 +1,8 @@
-package com.example.demo;
+package com.example.manytomany;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,9 +14,10 @@ public class Group {
     @Column
     private String name;
 
-    @OneToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "grpup_companies")
     @JoinColumn(name = "group_id")
-    private Set<Company> companies;
+    private Set<Company> companies = new HashSet<>();
 
     public Long getGroupId() {
         return groupId;

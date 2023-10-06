@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.onetomany;
 
 import jakarta.persistence.*;
 
@@ -11,6 +11,9 @@ public class Company {
     @Column
     private String name;
 
+    @Column(name = "group_id")
+    private Long groupId;
+
     public Company(Long id) {
         this.id = id;
     }
@@ -18,8 +21,13 @@ public class Company {
     public Company() {
     }
 
-    @Column(name = "group_id")
-    private Long groupId;
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long groupId) {
+        this.groupId = groupId;
+    }
 
     public String getName() {
         return name;
@@ -35,13 +43,5 @@ public class Company {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
     }
 }
