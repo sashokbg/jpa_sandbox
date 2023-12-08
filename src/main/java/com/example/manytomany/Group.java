@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "corporate_group")
-public class Group {
+class Group {
     @Id
     private Long groupId;
 

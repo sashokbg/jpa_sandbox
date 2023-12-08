@@ -1,10 +1,13 @@
 package com.example.onetomany;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 @Entity
 @Table(name = "corporate_company")
-public class Company {
+class Company {
     @Id
     private Long id;
 
@@ -14,19 +17,19 @@ public class Company {
     @Column(name = "group_id")
     private Long groupId;
 
+    @ElementCollection
+    List<Rule> rules;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    List<CompanyDetails> companyDetails = new ArrayList<>();
+
     public Company(Long id) {
         this.id = id;
+      rules = new ArrayList<>();
     }
 
     public Company() {
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
+      rules = new ArrayList<>();
     }
 
     public String getName() {

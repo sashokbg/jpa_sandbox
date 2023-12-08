@@ -1,29 +1,33 @@
-package com.example.onetomany;
+package com.example.elements_collection;
 
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import jakarta.persistence.EntityManagerFactory;
-import java.util.List;
+import org.checkerframework.checker.units.qual.C;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import static org.assertj.core.api.Assertions.assertThat;
+@SpringBootTest(classes = ElementsCollectionTest.class)
+@EnableAutoConfiguration
+@ContextConfiguration
+public class ElementsCollectionTest {
 
-@SpringBootTest
-class OneToManyAppTests {
     @Autowired
-    private GroupRepoOneToMany groupRepoOneToMany;
+    SessionFactory sessionFactory;
     @Autowired
-    private SessionFactory sessionFactory;
+    CompanyRepo companyRepo;
+
     static final int port = 5432;
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
@@ -34,7 +38,8 @@ class OneToManyAppTests {
             .withPassword("root")
             .withExposedPorts(port)
             .withCreateContainerCmdModifier(cmd -> cmd.withHostConfig(
-                    new HostConfig().withPortBindings(new PortBinding(Ports.Binding.bindPort(port), new ExposedPort(port)))
+                    new HostConfig().withPortBindings(
+                            new PortBinding(Ports.Binding.bindPort(port), new ExposedPort(port)))
             ))
             .withReuse(true);
 
@@ -64,32 +69,15 @@ class OneToManyAppTests {
     }
 
     @Test
-    void contextLoads() {
-        Group group = new Group();
-        group.setGroupId(1L);
-        group.setName("Proxym");
+    public void elementsCollection () {
+        Company company = new Company(1L, "c1");
 
-        Company company = new Company();
-        company.setId(1L);
-        company.setName("C1");
-        Rule rule1 = new Rule("rule 1", List.of(new RulePolicy(50, 100)));
-        Rule rule2 = new Rule("rule 2", List.of(new RulePolicy(0, 50)));
+        CompanyDetail detail1 = new CompanyDetail();
+        detail1.setDetail("detail 1");
+        detail1.setService("module:service");
 
-//        company.companyDetails new CompanyDetails("detail 1");
+        company.getCompanyDetails().add(detail1);
 
-        company.rules.add(rule1);
-        company.rules.add(rule2);
-
-        group.getCompanies().add(company);
-        groupRepoOneToMany.save(group);
-
-        company.companyDetails.add(new CompanyDetails(company, "detail 2"));
-
-        groupRepoOneToMany.save(group);
-
-        Group byId = groupRepoOneToMany.findById(1L).get();
-
-        assertThat(byId.getCompanies()).size().isEqualTo(1);
+        companyRepo.save(company);
     }
-
 }

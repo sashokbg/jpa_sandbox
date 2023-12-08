@@ -1,29 +1,34 @@
-package com.example.onetomany;
+package com.example.weak_entities_embedded_id;
 
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import jakarta.persistence.EntityManagerFactory;
-import java.util.List;
+import org.checkerframework.checker.units.qual.A;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import static org.assertj.core.api.Assertions.assertThat;
+@SpringBootTest(classes = WeakEntitiesTest.class)
+@EnableAutoConfiguration
+@ContextConfiguration
+class WeakEntitiesTest {
+    @Autowired
+    SessionFactory sessionFactory;
+    @Autowired
+    CompanyRepo companyRepo;
+    @Autowired
+    CompanyDetailRepo companyDetailRepo;
 
-@SpringBootTest
-class OneToManyAppTests {
-    @Autowired
-    private GroupRepoOneToMany groupRepoOneToMany;
-    @Autowired
-    private SessionFactory sessionFactory;
     static final int port = 5432;
 
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
@@ -34,7 +39,8 @@ class OneToManyAppTests {
             .withPassword("root")
             .withExposedPorts(port)
             .withCreateContainerCmdModifier(cmd -> cmd.withHostConfig(
-                    new HostConfig().withPortBindings(new PortBinding(Ports.Binding.bindPort(port), new ExposedPort(port)))
+                    new HostConfig().withPortBindings(
+                            new PortBinding(Ports.Binding.bindPort(port), new ExposedPort(port)))
             ))
             .withReuse(true);
 
@@ -64,32 +70,31 @@ class OneToManyAppTests {
     }
 
     @Test
-    void contextLoads() {
-        Group group = new Group();
-        group.setGroupId(1L);
-        group.setName("Proxym");
+    void weekEntity() {
+        Company company1 = new Company(1L, "C1");
 
-        Company company = new Company();
-        company.setId(1L);
-        company.setName("C1");
-        Rule rule1 = new Rule("rule 1", List.of(new RulePolicy(50, 100)));
-        Rule rule2 = new Rule("rule 2", List.of(new RulePolicy(0, 50)));
+        CompanyDetail companyDetail = new CompanyDetail();
+        companyDetail.detail = "DDD";
+        companyDetail.service = "service:toto";
+        companyDetail.companyId = 1L;
 
-//        company.companyDetails new CompanyDetails("detail 1");
+        CompanyDetail companyDetail2 = new CompanyDetail();
+        companyDetail2.detail = "DDD";
+        companyDetail2.service = "service:toto2";
+        companyDetail2.companyId = 1L;
 
-        company.rules.add(rule1);
-        company.rules.add(rule2);
+        company1.companyDetailsWithEntities.add(companyDetail);
+        company1.companyDetailsWithEntities.add(companyDetail2);
 
-        group.getCompanies().add(company);
-        groupRepoOneToMany.save(group);
+        companyRepo.save(company1);
 
-        company.companyDetails.add(new CompanyDetails(company, "detail 2"));
+        company1.companyDetailsWithEntities.remove(0);
 
-        groupRepoOneToMany.save(group);
+        companyRepo.save(company1);
 
-        Group byId = groupRepoOneToMany.findById(1L).get();
-
-        assertThat(byId.getCompanies()).size().isEqualTo(1);
+        Iterable<Company> all = companyRepo.findAll();
+        for (Company company : all) {
+            System.out.println(company);
+        }
     }
-
 }

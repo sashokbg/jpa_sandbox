@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 //@EnableJpaRepositories(basePackages = "com.example.*")
-public class OneToManyApp {
+class OneToManyApp {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OneToManyApp.class, args);

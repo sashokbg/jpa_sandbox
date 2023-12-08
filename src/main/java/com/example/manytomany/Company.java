@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "corporate_company")
-public class Company {
+class Company {
     @Id
     private Long id;
 

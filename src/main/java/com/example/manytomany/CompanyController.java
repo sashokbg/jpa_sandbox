@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("test")
-public class CompanyController {
+class CompanyController {
 
     @GetMapping("")
     public Optional<String> tt(@RequestParam(value = "a", required = false) Optional<String> a) {
