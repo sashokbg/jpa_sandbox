@@ -20,7 +20,6 @@ class CompanyDetail {
     String detail;
 
     @Id
-    @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company company;
 

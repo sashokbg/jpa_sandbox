@@ -76,12 +76,12 @@ class WeakEntitiesTest {
         CompanyDetail companyDetail = new CompanyDetail();
         companyDetail.detail = "DDD";
         companyDetail.service = "service:toto";
-        companyDetail.companyId = 1L;
+        companyDetail.setCompany(company1);
 
         CompanyDetail companyDetail2 = new CompanyDetail();
         companyDetail2.detail = "DDD";
         companyDetail2.service = "service:toto2";
-        companyDetail2.companyId = 1L;
+        companyDetail2.setCompany(company1);
 
         company1.companyDetailsWithEntities.add(companyDetail);
         company1.companyDetailsWithEntities.add(companyDetail2);

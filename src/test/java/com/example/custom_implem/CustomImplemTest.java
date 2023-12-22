@@ -1,11 +1,10 @@
-package com.example.elements_collection;
+package com.example.custom_implem;
 
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import jakarta.persistence.EntityManagerFactory;
-import org.checkerframework.checker.units.qual.C;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,10 +17,10 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-@SpringBootTest(classes = ElementsCollectionTest.class)
+@SpringBootTest(classes = CustomImplemTest.class)
 @EnableAutoConfiguration
 @ContextConfiguration
-public class ElementsCollectionTest {
+public class CustomImplemTest {
 
     @Autowired
     SessionFactory sessionFactory;
@@ -69,20 +68,10 @@ public class ElementsCollectionTest {
     }
 
     @Test
-    public void elementsCollection () {
+    public void test () {
         Company company = new Company(1L, "c1");
-
-        CompanyDetail detail1 = new CompanyDetail();
-        detail1.setDetail("detail 1");
-        detail1.setService("module:service");
-
-        CompanyDetail detail2 = new CompanyDetail();
-        detail2.setDetail("detail 2");
-        detail2.setService("module:service2");
-
-        company.getCompanyDetails().add(detail1);
-        company.getCompanyDetails().add(detail2);
-
         companyRepo.save(company);
+
+        companyRepo.custom("toto");
     }
 }

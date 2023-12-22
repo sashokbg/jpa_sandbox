@@ -9,16 +9,13 @@ import lombok.Setter;
 @Setter
 @IdClass(CompanyDetailPk.class)
 class CompanyDetail {
-    @Column(name = "company_id")
-    @Id
-    Long companyId;
 
     @Id
     String service;
 
     String detail;
 
-    @MapsId("company_id")
+    @Id
     @ManyToOne
     private Company company;
 

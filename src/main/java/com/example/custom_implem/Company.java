@@ -1,17 +1,17 @@
-package com.example.elements_collection;
+package com.example.custom_implem;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "corporate_company")
 @Data
 @NoArgsConstructor
-class Company {
+public class Company {
 
     @EmbeddedId
     private CompanyPk id;
@@ -26,8 +26,5 @@ class Company {
         this.id = new CompanyPk(id);
         this.name = name;
     }
-
-    @ElementCollection
-    List<CompanyDetail> companyDetails = new ArrayList<>();
 
 }
