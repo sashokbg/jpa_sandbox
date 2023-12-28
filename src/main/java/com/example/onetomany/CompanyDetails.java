@@ -12,7 +12,6 @@ class CompanyDetails {
   String details;
 
   @ManyToOne
-  @MapsId("company_id")
   Company company;
 
   public CompanyDetails() {

@@ -1,4 +1,4 @@
-package com.example.xml_mapping;
+package com.example.custom_repo_implem;
 
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
@@ -12,31 +12,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import javax.sql.DataSource;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-@SpringBootTest(classes = { XmlMappingTest.class, XmlConfig.class})
+@SpringBootTest(classes = CustomImplemTest.class)
 @EnableAutoConfiguration
 @ContextConfiguration
-class XmlMappingTest {
+public class CustomImplemTest {
     @Autowired
     SessionFactory sessionFactory;
     @Autowired
     CompanyRepo companyRepo;
-    @Autowired
-    GroupRepo groupRepo;
-
 
     static final int port = 5432;
 
@@ -79,14 +67,10 @@ class XmlMappingTest {
     }
 
     @Test
-    void test() {
-        Company company = new Company(1L, "Company");
-        Group group = new Group(1L, List.of(company));
+    public void test () {
+        Company company = new Company(1L, "c1");
+        companyRepo.save(company);
 
-        groupRepo.save(group);
-
-        Optional<Group> byId = groupRepo.findById(1L);
-
-        assertThat(byId).isPresent();
+        companyRepo.custom("toto");
     }
 }

@@ -5,6 +5,7 @@ import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.api.model.Ports;
 import jakarta.persistence.EntityManagerFactory;
+import org.assertj.core.api.Assertions;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -74,13 +75,17 @@ class WeakReposTestOneWay {
         companyRepo.save(company1);
 
         CompanyDetail companyDetailWithEntity = new CompanyDetail();
-        companyDetailWithEntity.setCompanyId(1L);
         companyDetailWithEntity.setDetail("DDD");
-        companyDetailWithEntity.setCompany(company1);
+
+        Company company = new Company();
+        company.setId(new CompanyPk(1L));
+        companyDetailWithEntity.setCompany(company);
         companyDetailWithEntity.setService("service:toto");
 
         detailsOneWayRepo.save(companyDetailWithEntity);
 
-        companyRepo.deleteById(new CompanyPk(1L)); // this will fail due to FK still there
+        Assertions.assertThatThrownBy(() -> {
+            companyRepo.deleteById(new CompanyPk(1L)); // this will fail due to FK still there
+        }).hasMessageContaining("violates foreign key");
     }
 }

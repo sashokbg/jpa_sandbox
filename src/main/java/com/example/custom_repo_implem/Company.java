@@ -1,4 +1,4 @@
-package com.example.custom_implem;
+package com.example.custom_repo_implem;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "corporate_company")
 @Data
 @NoArgsConstructor
-public class Company {
+class Company {
 
     @EmbeddedId
     private CompanyPk id;

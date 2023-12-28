@@ -1,4 +1,4 @@
-package com.example.custom_implem;
+package com.example.custom_annotation;
 
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
@@ -17,11 +17,10 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-@SpringBootTest(classes = CustomImplemTest.class)
+@SpringBootTest(classes = CustomAnnotationTest.class)
 @EnableAutoConfiguration
 @ContextConfiguration
-public class CustomImplemTest {
-
+public class CustomAnnotationTest {
     @Autowired
     SessionFactory sessionFactory;
     @Autowired
@@ -68,10 +67,14 @@ public class CustomImplemTest {
     }
 
     @Test
-    public void test () {
-        Company company = new Company(1L, "c1");
-        companyRepo.save(company);
+    void test() {
+       Company company = new Company();
+       company.setName("Name");
+       company.setId(new CompanyPk(1L));
+//        companyRepo.save(company);
 
-        companyRepo.custom("toto");
+       company.details.add(new CompanyDetail(company, "1", "2"));
+
+       companyRepo.save(company);
     }
 }

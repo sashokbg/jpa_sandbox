@@ -75,7 +75,7 @@ class OneToManyAppTests {
         Rule rule1 = new Rule("rule 1", List.of(new RulePolicy(50, 100)));
         Rule rule2 = new Rule("rule 2", List.of(new RulePolicy(0, 50)));
 
-//        company.companyDetails new CompanyDetails("detail 1");
+        company.companyDetails.add(new CompanyDetails(company, "detail 1"));
 
         company.rules.add(rule1);
         company.rules.add(rule2);

@@ -1,4 +1,4 @@
-package com.example.custom_implem;
+package com.example.custom_repo_implem;
 
 
 import org.springframework.data.repository.CrudRepository;
