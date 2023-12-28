@@ -1,8 +1,15 @@
 package com.example.manytomany;
 
 import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "corporate_company")
 class Company {
     @Id
@@ -11,26 +18,9 @@ class Company {
     @Column
     private String name;
 
-    public Company(Long id) {
-        this.id = id;
-    }
-
-    public Company() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToMany
+    @JoinTable(name = "corporate_group_companies",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "company_id"))
+    List<Group> groups;
 }
