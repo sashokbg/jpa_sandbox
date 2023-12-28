@@ -79,8 +79,11 @@ class WeakReposTestOneWay {
 
         Company company = new Company();
         company.setId(new CompanyPk(1L));
-        companyDetailWithEntity.setCompany(company);
-        companyDetailWithEntity.setService("service:toto");
+        CompanyDetailPk key = new CompanyDetailPk();
+
+        key.service = "service:toto";
+        key.companyId = company.getId();
+        companyDetailWithEntity.setKey(key);
 
         detailsOneWayRepo.save(companyDetailWithEntity);
 

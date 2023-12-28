@@ -11,8 +11,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CompanyDetailPk implements Serializable {
-    Company company;
+class CompanyDetailPk implements Serializable {
+    CompanyPk companyId;
 
     String service;
 }

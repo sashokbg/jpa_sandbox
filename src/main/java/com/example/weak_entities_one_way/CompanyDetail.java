@@ -7,15 +7,9 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@IdClass(CompanyDetailPk.class)
 class CompanyDetail {
-    @Id
-    String service;
-
-    @MapsId("company")
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    Company company;
+    @EmbeddedId
+    CompanyDetailPk key;
 
     String detail;
 
@@ -24,6 +18,6 @@ class CompanyDetail {
 
     public CompanyDetail(String service, String detail) {
         this.detail = detail;
-        this.service = service;
+        this.key.service = service;
     }
 }

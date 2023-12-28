@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Embeddable
 @Setter
 @NoArgsConstructor
-public class CompanyDetailPk implements Serializable {
+class CompanyDetailPk implements Serializable {
     Company company;
 
     String service;
