@@ -13,10 +13,7 @@ class Company {
 
     @Type(value = CompanyPKType.class)
     @Id
-    @GeneratedValue(generator = "prod-generator")
-    @GenericGenerator(name = "prod-generator",
-            parameters = @Parameter(name = "prefix", value = "prod"),
-            type = MyGenerator.class)
+    @GeneratedValue
     private CompanyPk id;
 
     @Column
