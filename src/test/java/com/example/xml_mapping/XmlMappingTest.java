@@ -1,5 +1,6 @@
 package com.example.xml_mapping;
 
+import com.example.PostgresTest;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
@@ -29,54 +30,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(classes = { XmlMappingTest.class, XmlConfig.class})
 @EnableAutoConfiguration
 @ContextConfiguration
-class XmlMappingTest {
-    @Autowired
-    SessionFactory sessionFactory;
+class XmlMappingTest extends PostgresTest {
     @Autowired
     CompanyRepo companyRepo;
     @Autowired
     GroupRepo groupRepo;
-
-
-    static final int port = 5432;
-
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-            "postgres:15-alpine"
-    )
-            .withDatabaseName("test")
-            .withUsername("root")
-            .withPassword("root")
-            .withExposedPorts(port)
-            .withCreateContainerCmdModifier(cmd -> cmd.withHostConfig(
-                    new HostConfig().withPortBindings(
-                            new PortBinding(Ports.Binding.bindPort(port), new ExposedPort(port)))
-            ))
-            .withReuse(true);
-
-    @BeforeAll
-    static void beforeAll() {
-        postgres.start();
-    }
-
-    @AfterAll
-    static void afterAll() {
-        postgres.stop();
-    }
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
-
-    @Autowired
-    public void setHibernateFactoy(EntityManagerFactory factory) {
-        if (factory.unwrap(SessionFactory.class) == null) {
-            throw new NullPointerException("factory is not a hibernate factory");
-        }
-        this.sessionFactory = factory.unwrap(SessionFactory.class);
-    }
 
     @Test
     void test() {

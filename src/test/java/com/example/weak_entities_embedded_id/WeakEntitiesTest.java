@@ -1,5 +1,6 @@
 package com.example.weak_entities_embedded_id;
 
+import com.example.PostgresTest;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
@@ -21,9 +22,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @SpringBootTest(classes = WeakEntitiesTest.class)
 @EnableAutoConfiguration
 @ContextConfiguration
-class WeakEntitiesTest {
-    @Autowired
-    SessionFactory sessionFactory;
+class WeakEntitiesTest extends PostgresTest {
     @Autowired
     CompanyRepo companyRepo;
     @Autowired

@@ -1,6 +1,7 @@
 package com.example.weak_entities_one_way;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,8 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 class CompanyDetailPk implements Serializable {
-    CompanyPk companyId;
+    @ManyToOne
+    Company company;
 
     String service;
 }
